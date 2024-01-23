@@ -1,0 +1,5 @@
+/* Add this to your CSS */
+nav .navbar-nav .active-link {
+  color: #648c37 !important;
+  /* Add any other styles you want for the active link */
+}

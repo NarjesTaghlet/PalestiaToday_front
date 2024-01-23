@@ -1,0 +1,11 @@
+/* fils.component.css */
+.fils {
+    padding: 6px;
+    margin: 10px auto; /* Auto margin for centering horizontally */
+    text-align: center;
+    color: black;
+    background-color: #F1F0E8;
+    border-radius: 5px;
+    width: 400px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }

@@ -1,0 +1,13 @@
+<div [style.backgroundColor]="color">
+
+    <input #inputcolor (change)="changercouleur(inputcolor.value)" type="text" placeholder="Saisissez du texte" />
+    <!--Two way data binding-->
+    <!--  <input [(ngModel)]="color" type="text" placeholder="Saisissez du texte" />
+    La couleur est {{color}} -->
+  
+  </div>
+  <br>
+  <br>
+  
+  <button type="button" class="btn btn-info" (click)="defaultcolor()"> Couleur par défaut</button>
+  

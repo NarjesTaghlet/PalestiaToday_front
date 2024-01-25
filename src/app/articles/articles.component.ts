@@ -1,67 +1,84 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ArticleService } from '../services/article.service';
+import {ToastrService} from "ngx-toastr";
+import {AuthService} from "../auth.service";
 // import { fadeIn, cardAnimation } from './../animations'; // Update with your actual path
 
 @Component({
   selector: 'app-articles',
   templateUrl: './articles.component.html',
   styleUrls: ['./articles.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush // Using OnPush for performance
+  //changeDetection: ChangeDetectionStrategy.OnPush // Using OnPush for performance
   // animations: [fadeIn, cardAnimation]
 
 })
 export class ArticlesComponent implements OnInit {
   // isLoading = false;
   // hovering = false;
-  articles = [
-    {
-      id: 1, // make sure each article has a unique id
-      title: 'The Resilience of Hope',
-      summary: 'Amidst the shadows of conflict, the spirit of perseverance emerges in the streets of Gaza.',
-      image: 'https://via.placeholder.com/400x200/000000/FFFFFF/?text=Palestine+1',
-      date: new Date('2024-01-20')
-    },
-    {
-      id: 2, // make sure each article has a unique id
-      title: 'Echoes of Yesterday',
-      summary: 'A reflection on the historical narratives that continue to shape the landscape of the West Bank.',
-      image: 'https://via.placeholder.com/400x200/000000/FFFFFF/?text=Palestine+2',
-      date: new Date('2024-01-22')
-    },
-    {
-      id: 3, // make sure each article has a unique id
-      title: 'A Glimpse Beyond the Wall',
-      summary: 'Exploring the day-to-day life and culture that thrives beyond the barriers.',
-      image: 'https://via.placeholder.com/400x200/000000/FFFFFF/?text=Palestine+3',
-      date: new Date('2024-01-25')
-    },
-    // ...hedhom fake taw mba3ed ki norbtou tet7assen
-  ];
-
-  filteredArticles = [...this.articles];
+  articles:any[] = [];
+  filteredArticles:any[] = [...this.articles];
 
 
-  constructor(private router: Router, private articleService: ArticleService) { }
+  constructor(private router: Router, private articleService: ArticleService,private toastr : ToastrService,public authservice : AuthService) {
+
+  }
 
   ngOnInit(): void {
+    console.log("hani fl ngonit");
+
     this.loadArticles();
   }
 
   loadArticles(): void {
-    this.articleService.getArticle().subscribe((data: any) => {
-      this.articles = data;
-      this.filteredArticles = data;
-    });
-  }
+    this.articleService.getArticles().subscribe(
+        (data: any) => {
+          this.articles = data;
 
+        },
+        (error) => {
+          console.error('Error loading articles', error);
+          this.toastr.error("Error loading articles")
+        }
+    );
+  }
   searchArticles(searchTerm: string): void {
     this.filteredArticles = this.articles.filter(article =>
       article.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
+  showCard = false;
+
+  // Method to toggle card visibility
+
   viewArticleDetail(articleId: number): void {
-    this.router.navigate(['/article', articleId]);
+
+    if(this.authservice.isAuthenticated() ){
+      this.router.navigate(['/article', articleId]);
+
+    }else{
+      this.showCard = !this.showCard;
+      this.router.navigate(['/read-more'])
+    }
   }
 
+  getSummary(content: string): string {
+    const firstSentence = content.split(/(?<=[.?!])\s/, 1)[0];
+    return firstSentence;
+  }
+
+
+
+  redirectToReadMore() {
+    // Check if the user is a visitor or not admin and not abonne
+    const isAdmin = this.authservice.isAdmin()
+    const isAbonne = this.authservice.getUser(this.authservice.getToken())?.role
+
+    if ( !isAdmin && !isAbonne) {
+      // Navigate to the ReadMoreComponent
+      this.router.navigate(['/register']);
+    } else {
+      this.router.navigate(['/home'])
+    }
+  }
 }

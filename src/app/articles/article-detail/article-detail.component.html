@@ -1,0 +1,72 @@
+<!-- article-detail.component.html -->
+<div class="container my-5">
+  <div *ngIf="article" class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title">{{ article.title }}</h2>
+      <p class="card-text">{{article.description}}</p>
+
+      <!-- Like/Dislike Section -->
+      <div class="mt-4 d-flex align-items-center">
+        <h4 class="mr-3">Likes/Dislikes</h4>
+        <button class="btn btn-like" (click)="toggleLike()">
+          <i class="fas fa-thumbs-up" [ngClass]="{'liked': article.liked}"></i>
+          {{ article.likes }} Likes
+        </button>
+        <button class="btn btn-dislike ml-3" (click)="toggleDislike()">
+          <i class="fas fa-thumbs-down" [ngClass]="{'disliked': article.disliked}"></i>
+          {{ article.dislikes }} Dislikes
+        </button>
+      </div>
+
+      <!-- Rating Section -->
+      <div class="d-flex align-items-center">
+        <span class="mr-2">Your Rating:</span>
+        <div class="star-rating">
+          <span
+            *ngFor="let i of [1, 2, 3, 4, 5]"
+            class="star"
+            (click)="setRating(i)"
+            [class.locked]="i > userRating"
+            [class.selected]="i <= selectedRating"
+          >
+            <i class="fas" [ngClass]="{'fa-star': i <= selectedRating, 'fa-star-o': i > selectedRating}"></i>
+          </span>
+        </div>
+      </div>
+
+
+      <!-- Comment Section -->
+      <div class="mt-4 card shadow">
+        <div class="card-body">
+          <h4>Comments</h4>
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let comment of comments.slice(0, commentsToShow)">{{ comment }}</li>
+          </ul>
+         <div>
+
+           <!-- Dans votre composant.html -->
+
+           <div *ngIf="comments.length > commentsToShow">
+             <button class="btn btn-link btn-show-more" (click)="loadMoreComments()" *ngIf="commentsToShow < comments.length">Show more comments</button>
+             <button class="btn btn-link" (click)="showLessComments()" *ngIf="commentsToShow > 3">Show less comments</button>
+           </div>
+
+
+
+
+         </div>
+          <!-- Add Comment Form -->
+          <div class="mt-3">
+            <h5>Add a Comment</h5>
+            <form (ngSubmit)="addComment()">
+              <div class="form-group">
+                <input class="form-control" [(ngModel)]="newComment" name="newComment" placeholder="Your comment">
+              </div>
+              <button type="submit" class="btn btn-danger">Add Comment</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -17,13 +17,26 @@
         <img [src]="article.image" class="card-img-top article-image" alt="Article Image">
         <div class="card-body">
           <h5 class="card-title">{{ article.title }}</h5>
-          <p class="card-text">{{ article.summary }}</p>
-          <!-- <a href="#" class="btn btn-read-more">Read More</a> -->
-          <button (click)="viewArticleDetail(article.id)" class="btn btn-read-more">Read More</button>
+          <p class="card-text">{{getSummary(article.description)}}</p>
 
+          <!-- <a href="#" class="btn btn-read-more">Read More</a> -->
+          <button  (click)="viewArticleDetail(article.id)" class="btn btn-read-more">Read More</button>
+          <!-- Your card, conditionally displayed based on showCard -->
+          <div *ngIf="showCard" class="card">
+            <!-- Card content goes here -->
+            <p>This is the additional content...</p>
+          </div>
+
+
+
+<!--
+          <button  (click)="viewArticleDetail(article.id)" class="btn btn-read-more">Read More</button>
+-->
         </div>
         <div class="card-footer">
-          <small class="text-muted">Published on {{ article.date | date:'mediumDate' }}</small>
+          <small class="text-muted">Published on {{ article.createdAt | date:'mediumDate' }}</small>
+          <br>
+          <small class="text-muted">Updated on {{ article.updatedAt | date:'mediumDate' }}</small>
         </div>
       </div>
     </div>

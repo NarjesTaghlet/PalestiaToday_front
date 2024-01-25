@@ -16,6 +16,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { AuthGuard } from './auth.guard';
 import {RegisterComponent} from "./register/register.component";
 import {AccessGuard} from "./guards/access.guard";
+import {ArticleDetailComponent} from "./articles/article-detail/article-detail.component";
+import {ReadMoreComponent} from "./read-more/read-more.component";
 const routes: Routes = [
   {path: 'cv', children:[
     { path: '', component: CvComponent },
@@ -35,8 +37,13 @@ const routes: Routes = [
   { path: 'about', component: AboutUsComponent },
   { path: 'articles', component: ArticlesComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'article/:id', component: ArticleDetailComponent},
+  { path: 'read-more', component: ReadMoreComponent},
 
-    //en cas d'erreur
+
+
+
+  //en cas d'erreur
     { path: '**', component: ErrorComponent },
 ];
 

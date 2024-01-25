@@ -8,7 +8,8 @@ import {AuthService} from "../auth.service";
 })
 export class ArticleService {
 
-  private apiUrl = 'http://localhost:3000/article'; // Adjust the URL to your NestJS server
+  private apiUrl = 'http://localhost:3000/article';
+  private  apiUrl2='http://localhost:3000/interactionarticle' ;
 
   constructor(private http: HttpClient,private authservice : AuthService) { }
 
@@ -19,11 +20,28 @@ export class ArticleService {
     return this.http.post<any>(`${this.apiUrl}/add` , { title, description },{params});
   }
 
-  getArticle(): Observable<any>{
-    return this.http.get(this.apiUrl);
+  getArticles(): Observable<any>{
+      console.log("hani fl getarticles m service")
+      console.log('apiurl:',this.apiUrl)
+    console.log(this.http.get<any>(`${this.apiUrl}`))
+    return this.http.get<any>(`${this.apiUrl}`);
   }
 
   fetchArticleData(articleId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${articleId}`);
+  }
+
+  getComments(articleId : number):Observable<any> {
+      return this.http.get<any>(`${this.apiUrl2}/comment/${articleId}`);
+  }
+
+
+  addcomment(contenu : string , articleId : number , idUser: number):Observable<any>{
+    console.log("aslema")
+    console.log(contenu)
+    console.log(articleId)
+    console.log(this.http.post<any>(`${this.apiUrl2}/comment/${articleId}/${idUser}`,{contenu}))
+      return this.http.post<any>(`${this.apiUrl2}/comment/${articleId}/${idUser}`,{contenu});
+
   }
 }

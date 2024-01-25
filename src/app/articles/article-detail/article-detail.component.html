@@ -3,20 +3,42 @@
   <div *ngIf="article" class="card shadow">
     <div class="card-body">
       <h2 class="card-title">{{ article.title }}</h2>
-      <p class="card-text">{{article.description}}</p>
+      <p class="card-text custom-description">{{article.description}}</p>
+
 
       <!-- Like/Dislike Section -->
       <div class="mt-4 d-flex align-items-center">
         <h4 class="mr-3">Likes/Dislikes</h4>
-        <button class="btn btn-like" (click)="toggleLike()">
+        <button class="btn btn-success " (click)="toggleLike()">
           <i class="fas fa-thumbs-up" [ngClass]="{'liked': article.liked}"></i>
-          {{ article.likes }} Likes
-        </button>
-        <button class="btn btn-dislike ml-3" (click)="toggleDislike()">
+          {{ article.likes }}
+        </button><button class="btn btn-danger ml-3" (click)="toggleDislike()">
           <i class="fas fa-thumbs-down" [ngClass]="{'disliked': article.disliked}"></i>
-          {{ article.dislikes }} Dislikes
+          {{ article.dislikes }}
         </button>
       </div>
+
+      <!-- Modify/Delete Buttons on the far right -->
+      <div *ngIf="authservice.isAdmin()" class="d-flex justify-content-end">
+        <div>
+          <button  class="btn btn-success mr-2" (click)="modifyArticle()">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button class="btn btn-danger" (click)="deleteArticle()">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+
+
+
+      <div *ngIf="isModifying" class="mt-3">
+        <textarea [(ngModel)]="article.title" class="form-control" placeholder="Enter modified title"></textarea>
+        <textarea [(ngModel)]="article.description" class="form-control" placeholder="Enter modified description"></textarea>
+        <button class="btn btn-primary mt-2" (click)="saveModification()">Save</button>
+        <button class="btn btn-secondary mt-2 ml-2" (click)="cancelModification()">Cancel</button>
+      </div>
+
 
       <!-- Rating Section -->
       <div class="d-flex align-items-center">
@@ -40,15 +62,30 @@
         <div class="card-body">
           <h4>Comments</h4>
           <ul class="list-group">
-            <li class="list-group-item" *ngFor="let comment of comments.slice(0, commentsToShow)">{{ comment }}</li>
+            <li class="list-group-item" *ngFor="let comment of comments.slice(0, commentsToShow)">{{ comment }}
+            </li>
+          </ul>
+          <div>
+<!--
+            <li class="list-group-item" *ngFor="let comment of comments.slice(0, commentsToShow)">{{ comment }}
+              <div class="d-flex justify-content-end mt-2">
+                <button class="btn btn-sm btn-info mr-2" (click)="modifyComment(comment)">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="deleteComment(comment)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </li>
+
           </ul>
          <div>
-
+-->
            <!-- Dans votre composant.html -->
 
            <div *ngIf="comments.length > commentsToShow">
              <button class="btn btn-link btn-show-more" (click)="loadMoreComments()" *ngIf="commentsToShow < comments.length">Show more comments</button>
-             <button class="btn btn-link" (click)="showLessComments()" *ngIf="commentsToShow > 3">Show less comments</button>
+             <button class="btn btn-link" (click)="showLessComments()" *ngIf="commentsToShow > 3">Show less comments {{commentsToShow}}</button>
            </div>
 
 

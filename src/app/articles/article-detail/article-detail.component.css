@@ -8,6 +8,13 @@
   color: #333;
 }
 
+
+.custom-description {
+  font-size: 16px; /* Taille du texte */
+  line-height: 1.5; /* Hauteur de ligne (espace entre les lignes) */
+  /* Ajoutez d'autres styles au besoin */
+}
+
 .card-text {
   color: #555;
 }

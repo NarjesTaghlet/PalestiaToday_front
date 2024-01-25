@@ -21,9 +21,9 @@ export class ArticleService {
   }
 
   getArticles(): Observable<any>{
-      console.log("hani fl getarticles m service")
-      console.log('apiurl:',this.apiUrl)
-    console.log(this.http.get<any>(`${this.apiUrl}`))
+     // console.log("hani fl getarticles m service")
+     // console.log('apiurl:',this.apiUrl)
+    // console.log(this.http.get<any>(`${this.apiUrl}`))
     return this.http.get<any>(`${this.apiUrl}`);
   }
 
@@ -37,11 +37,18 @@ export class ArticleService {
 
 
   addcomment(contenu : string , articleId : number , idUser: number):Observable<any>{
-    console.log("aslema")
-    console.log(contenu)
-    console.log(articleId)
-    console.log(this.http.post<any>(`${this.apiUrl2}/comment/${articleId}/${idUser}`,{contenu}))
+    //console.log(this.http.post<any>(`${this.apiUrl2}/comment/${articleId}/${idUser}`,{contenu}))
       return this.http.post<any>(`${this.apiUrl2}/comment/${articleId}/${idUser}`,{contenu});
 
   }
+
+  DeleteArticle(articleId : number):Observable<any>{
+    console.log(this.http.delete<any>(`${this.apiUrl}/${articleId}`))
+    return this.http.delete<any>(`${this.apiUrl}/${articleId}`);
+  }
+
+  ModifyArticle(articleId : number,title : string , description : string){
+    return this.http.patch<any>(`${this.apiUrl}/${articleId}`,{title, description});
+  }
+
 }

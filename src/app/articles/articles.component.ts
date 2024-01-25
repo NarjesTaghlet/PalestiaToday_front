@@ -26,7 +26,6 @@ export class ArticlesComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("hani fl ngonit");
-
     this.loadArticles();
   }
 
@@ -34,7 +33,6 @@ export class ArticlesComponent implements OnInit {
     this.articleService.getArticles().subscribe(
         (data: any) => {
           this.articles = data;
-
         },
         (error) => {
           console.error('Error loading articles', error);
@@ -67,7 +65,22 @@ export class ArticlesComponent implements OnInit {
     return firstSentence;
   }
 
+  readonly staticImages: string[] = [
+    './../../assets/images/bg1.jpg',
+    './../../assets/images/bg3.jpg',
+    './../../assets/images/bg4.jpg',
+    './../../assets/images/header.jpg',
+    './../../assets/images/bg2.jpg',
+    // ... other images
+  ];
+  currentPage: number = 1;
+  itemsPerPage: number = 6;
+  pages: number[] = [];
+  paginatedArticles: any[] = [];
 
+  getImageForArticle(index: number): string {
+    return this.staticImages[index % this.staticImages.length];
+  }
 
   redirectToReadMore() {
     // Check if the user is a visitor or not admin and not abonne

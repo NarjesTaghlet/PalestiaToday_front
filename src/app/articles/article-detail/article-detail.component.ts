@@ -20,24 +20,24 @@ export class ArticleDetailComponent implements OnInit {
     comments: string[] = []; // Array to store comments
     userRating: number = 5;
     selectedRating: number = 0;
-     commentsToShow :number =3 ;
+    commentsToShow :number =3 ;
      private streamSubscription!: Subscription;
+  isModifying = false; // Boolean variable to track whether modification mode is active
+
 
 
     constructor(
         private route: ActivatedRoute,
         private articleService: ArticleService,
         private router: Router,
-        private authservice : AuthService,
+        public authservice : AuthService,
         private toastr : ToastrService,
-        private streamservice :CommentService
 
     ) {}
 
     ngOnInit(): void {
-        const articleIdParam = this.route.snapshot.paramMap.get('id');
-        this.getComments();
-
+      const articleIdParam = this.route.snapshot.paramMap.get('id');
+      this.getComments();
 
       if (articleIdParam) {
             const articleId = +articleIdParam;
@@ -62,12 +62,7 @@ export class ArticleDetailComponent implements OnInit {
             this.article.dislikes = 0;
         }
     }
-  ngOnDestroy(): void {
-    // Unsubscribe when the component is destroyed to avoid memory leaks
-    if (this.streamSubscription) {
-      this.streamSubscription.unsubscribe();
-    }
-  }
+
 
 
 
@@ -123,7 +118,7 @@ export class ArticleDetailComponent implements OnInit {
         this.articleService.addcomment(this.newComment,+articleIdParam,+idUser).subscribe(
           (response) =>{
             this.toastr.success("commentaire ajouté avec succès");
-           // this.getComments()
+            this.getComments()
           },
           (error)=>{
             this.toastr.error("Erreur lors de l'ajout");
@@ -148,7 +143,7 @@ export class ArticleDetailComponent implements OnInit {
     }
 
 
-    getComments() {
+    getComments2() {
       const articleIdParam = this.route.snapshot.paramMap.get('id');
       if(articleIdParam){
         this.articleService.getComments(+articleIdParam).subscribe(
@@ -163,7 +158,7 @@ export class ArticleDetailComponent implements OnInit {
                    // console.log("response",response[pas].username)
                    //console.log("ena username",response[pas]);
                     //console.log("ena l commentaire mte3ou " ,data[pas].commentaire )
-                    const comment ="username     " + response[(data[pas].id_user)-1].username  + "commentaire      " + data[pas].commentaire ;
+                    const comment = "Username " + response[(data[pas].id_user) - 1].username + " - " + data[pas].commentaire;
                     this.comments.unshift(comment)
                   },
                   (error)=>{
@@ -186,14 +181,39 @@ export class ArticleDetailComponent implements OnInit {
 
 
 
-  getComments2() {
+  deleteArticle() {
+    const articleIdParam = this.route.snapshot.paramMap.get('id');
+    if(articleIdParam){
+      console.log("hello ena f delete")
+      this.articleService.DeleteArticle(+articleIdParam).subscribe(
+        (response)=>{
+          console.log(response)
+          this.toastr.success("Deleted successfully")
+          this.router.navigate(['/articles']);
+
+        },
+        (error)=>{
+          this.toastr.error("Error deleting")
+        }
+      )
+
+    }
+  }
+
+
+
+
+
+  getComments() {
     const articleIdParam = this.route.snapshot.paramMap.get('id');
 
     if (articleIdParam) {
+      this.comments =[];
       this.articleService.getComments(+articleIdParam).subscribe(
         (data) => {
           // Start processing comments sequentially
           this.processCommentsOnebyOne(data, 0);
+
         },
         (error) => {
           this.toastr.error("Erreur getting comments");
@@ -212,7 +232,7 @@ export class ArticleDetailComponent implements OnInit {
           //response[0] atana l usrname taa id 1
           const username = response[(comment.id_user) -1 ].username;
           //console.log("salut username",username)
-          const commentText = `username ${username} commentaire ${comment.commentaire}`;
+          const commentText = ` ${username} :  ${comment.commentaire}`;
           this.comments.unshift(commentText);
 
           // Process the next comment
@@ -231,7 +251,37 @@ export class ArticleDetailComponent implements OnInit {
     }
   }
 
+/*************** section Modify *********************/
 
+  modifyArticle(): void {
+    this.isModifying = true;
+  }
+
+  saveModification(): void {
+    // Implement logic to save the modified description
+    // You can use this.modifiedDescription to get the modified value
+    const articleIdParam = this.route.snapshot.paramMap.get('id');
+    if(articleIdParam){
+    this.articleService.ModifyArticle(+articleIdParam,this.article.title,this.article.description).subscribe(
+      (response)=>{
+        console.log("modified title");
+      },
+      (error)=>{
+        console.log("hhehe ghalet")
+      }
+    )
+
+
+  }
+    this.isModifying = false;
+
+  }
+
+  cancelModification(): void {
+    this.isModifying = false;
+  }
+
+  /*************** section Modify *********************/
 
 
 
@@ -242,4 +292,10 @@ export class ArticleDetailComponent implements OnInit {
   showLessComments() {
     this.commentsToShow = 3; // Réinitialisez le nombre de commentaires à afficher lors du clic sur "Show less"
   }
+
+
+
+
+  deleteComment(comment : string){}
+  modifyComment(comment : string){}
 }

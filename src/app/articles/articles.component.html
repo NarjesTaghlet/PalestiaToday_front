@@ -1,13 +1,17 @@
-<p>articles works!</p>
-<input type="text" placeholder="Search articles..." (input)="searchArticles($any($event.target).value)">
-<button (click)="loadArticles()">Load All Articles</button>
-
 <div class="container my-5">
   <!-- Logo and header -->
   <div class="text-center mb-5">
     <img src="./../../assets/images/logo-removebg-preview.png" alt="Blog Logo" class="blog-logo" />
     <h1 class="blog-title">Palestine Chronicles</h1>
     <h2 class="latest-articles-title">Latest Articles on Palestine</h2>
+  </div>
+
+  <!-- Display the card if showCard is true -->
+  <div *ngIf="showCard" class="card mt-5">
+    <div class="card-body">
+      <p >You must be logged in to view this content. Please subscribe to continue.</p>
+      <button (click)="redirectToLogin()" class="btn btn-read-more">Log In</button>
+    </div>
   </div>
 
   <div class="row">
@@ -21,17 +25,6 @@
 
           <!-- <a href="#" class="btn btn-read-more">Read More</a> -->
           <button  (click)="viewArticleDetail(article.id)" class="btn btn-read-more">Read More</button>
-          <!-- Your card, conditionally displayed based on showCard -->
-          <div *ngIf="showCard" class="card">
-            <!-- Card content goes here -->
-            <p>This is the additional content...</p>
-          </div>
-
-
-
-<!--
-          <button  (click)="viewArticleDetail(article.id)" class="btn btn-read-more">Read More</button>
--->
         </div>
         <div class="card-footer">
           <small class="text-muted">Published on {{ article.createdAt | date:'mediumDate' }}</small>
@@ -42,4 +35,3 @@
     </div>
   </div>
 </div>
-

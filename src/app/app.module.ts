@@ -37,7 +37,8 @@ import { AuthGuard } from './auth.guard';
 import { RegisterComponent } from './register/register.component';
 import {AccessGuard} from "./guards/access.guard";
 import { ArticleDetailComponent } from "./articles/article-detail/article-detail.component";
-import { ReadMoreComponent } from './read-more/read-more.component';
+import {ErrorComponent} from "./error/error.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 @NgModule({
   declarations: [
@@ -63,8 +64,8 @@ import { ReadMoreComponent } from './read-more/read-more.component';
     LogoutComponent,
     RegisterComponent,
     ArticleDetailComponent,
-    ReadMoreComponent,
-    //EmbaucheComponent,
+    ErrorComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {ArticleService} from "../../services/article.service";
-import {error} from "@angular/compiler-cli/src/transformers/util";
 import {AuthService} from "../../auth.service";
-import {compareNumbers} from "@angular/compiler-cli/src/version_helpers";
 import {ToastrService} from "ngx-toastr";
-import {catchError, concatMap, forkJoin, from, map, Observable, of, Subscription, toArray} from "rxjs";
-import {CommentService} from "../../services/comment.service";
-import {User} from "../../Model/user";
+import { Subscription} from "rxjs";
 
 @Component({
     selector: 'app-article-detail',
@@ -23,6 +19,7 @@ export class ArticleDetailComponent implements OnInit {
     commentsToShow :number =3 ;
      private streamSubscription!: Subscription;
   isModifying = false; // Boolean variable to track whether modification mode is active
+    likesCount! : number  ;
 
 
 
@@ -36,30 +33,49 @@ export class ArticleDetailComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-      const articleIdParam = this.route.snapshot.paramMap.get('id');
-      this.getComments();
-
-      if (articleIdParam) {
+        this.article = { likes: 0, dislikes: 0 };
+        const articleIdParam = this.route.snapshot.paramMap.get('id');
+        this.getComments();
+        if (articleIdParam) {
             const articleId = +articleIdParam;
-            this.articleService.getComments(articleId);
-            this.articleService.fetchArticleData(articleId).subscribe(
-                (data) => {
-                    this.article = data;
-                },
-                (error) => {
-                    console.error('Error fetching article data:', error);
-                    // Handle the error or navigate to an error page
-                }
-            );
-        } else {
-            // Handle the null case
-            this.router.navigate(['/error']);
-        }
-        if (this.article.likes === undefined) {
-            this.article.likes = 0;
-        }
-        if (this.article.dislikes === undefined) {
-            this.article.dislikes = 0;
+            const user = this.authservice.getUser(this.authservice.getToken())
+            console.log("hana article detail")
+            if(user && articleIdParam){
+                const idUser = user.id ;
+                //console.log(idUser);
+                console.log(+articleIdParam);
+                this.articleService.getNote(+articleIdParam,+idUser).subscribe(
+                    (note) => {
+                        // Assuming the API returns an array of notes, and you need the first one.
+                        this.userRating = note.length ? note[0].note : 0;
+                        this.selectedRating = this.userRating; // Initialize the rating stars
+                    },
+                    (error) => {
+                        console.error('Error fetching user note:', error);
+                        this.userRating = 0;
+                        this.selectedRating = 0;
+                    }
+                );
+                this.articleService.getComments(articleId);
+                this.articleService.fetchArticleData(articleId).subscribe(
+                    (data) => {
+                        this.article = data;
+                    },
+                    (error) => {
+                        console.error('Error fetching article data:', error);
+                        // Handle the error or navigate to an error page
+                    }
+                );
+            } else {
+                // Handle the null case
+                this.router.navigate(['/error']);
+            }
+            if (this.article.likes === undefined) {
+                this.article.likes = 0;
+            }
+            if (this.article.dislikes === undefined) {
+                this.article.dislikes = 0;
+            }
         }
     }
 
@@ -74,37 +90,111 @@ export class ArticleDetailComponent implements OnInit {
         this.article.dislikes++;
     }
 
-    toggleLike(): void {
-        if (!this.article.liked) {
-            this.article.likes++;
-            if (this.article.disliked) {
-                this.article.dislikes--;
-            }
-        } else {
-            this.article.likes--;
+    toggleLike() {
+        const articleIdParam = this.route.snapshot.paramMap.get('id');
+        const user = this.authservice.getUser(this.authservice.getToken())
+        //console.log("user",user?.id)
+        if(user && articleIdParam){
+            const idUser = user.id ;
+            //console.log("ena l id hehe",idUser)
+            this.articleService.addLike(+articleIdParam, +idUser).subscribe(
+                (response) => {
+                    if (!this.article.liked) {
+                        this.article.likes++;
+                        if (this.article.disliked) {
+                            this.article.dislikes--;
+                        }
+                    } else {
+                        this.article.likes--;
+                    }
+                    this.article.liked = !this.article.liked;
+                    this.article.disliked = this.article.liked ? false : this.article.disliked;
+                });
         }
-        this.article.liked = !this.article.liked;
-        this.article.disliked = this.article.liked ? false : this.article.disliked;
     }
 
-    toggleDislike(): void {
-        if (!this.article.disliked) {
-            this.article.dislikes++;
-            if (this.article.liked) {
-                this.article.likes--;
-            }
-        } else {
-            this.article.dislikes--;
+    toggleLike1() {
+        const articleIdParam = this.route.snapshot.paramMap.get('id');
+        const user = this.authservice.getUser(this.authservice.getToken());
+
+        if (user && articleIdParam) {
+            const idUser = user.id;
+
+            // Utilisez la fonction addLike pour ajouter le like
+            this.articleService.addLike(+articleIdParam, +idUser).subscribe(
+                () => {
+                    //  obtenir le nombre de likes mis à jour
+                    this.articleService.getLikes(+articleIdParam).subscribe(
+                        (likesCount) => {
+                            console.log('Likes count after like added:', likesCount);
+
+                            // Mettez à jour les compteurs de likes et dislikes
+                            if (!this.article.liked) {
+                                this.article.likes = likesCount;
+                                if (this.article.disliked) {
+                                    this.article.dislikes--;
+                                }
+                            } else {
+                                // Si déjà liké, le nouveau like est en réalité un dislike
+                                this.article.likes--;
+                            }
+
+                            // Inversez le statut liked/disliked
+                            this.article.liked = !this.article.liked;
+                            this.article.disliked = this.article.liked ? false : this.article.disliked;
+
+                        },
+                        (error) => {
+                            console.error('Erreur lors de la demande de likes après ajout :', error);
+                        }
+                    );
+                },
+                (error) => {
+                    console.error('Erreur lors de l\'ajout de like :', error);
+                }
+            );
         }
-        this.article.disliked = !this.article.disliked;
-        this.article.liked = this.article.disliked ? false : this.article.liked;
     }
 
-    updateUserRating(): void {
-        // Update the user's rating
-        this.article.userRating = this.userRating;
-    }
+// toggleDislike function
+    toggleDislike() {
+        const articleIdParam = this.route.snapshot.paramMap.get('id');
+        const user = this.authservice.getUser(this.authservice.getToken());
 
+        if (user && articleIdParam) {
+            const idUser = user.id;
+
+            // Utilisez la fonction adddisLike pour ajouter le dislike
+            this.articleService.adddisLike(+articleIdParam, +idUser).subscribe(
+                (response) => {
+                    // obtenir le nombre de likes mis à jour
+                    this.articleService.getDislikes(+articleIdParam).subscribe(
+                        (dislikesCount) => {
+                            console.log('Likes count after dislike added:', dislikesCount);
+
+                            // Mettez à jour les compteurs de likes et dislikes
+                            if (!this.article.disliked) {
+                                this.article.dislikes = dislikesCount;
+                                if (this.article.liked) {
+                                    this.article.likes--;
+                                }
+                            } else {
+                                // Si déjà disliké, le nouveau dislike est en réalité un like
+                                this.article.dislikes--;
+                            }
+
+                            // Inversez le statut liked/disliked
+                            this.article.disliked = !this.article.disliked;
+                            this.article.liked = this.article.disliked ? false : this.article.liked;
+                        },
+                        (error) => {
+                            console.error('Erreur lors de la demande de likes après ajout de dislike:', error);
+                        }
+                    );
+                }
+            );
+        }
+    }
 
     addComment(): void {
       //console.log("ena l comment",this.newComment)
@@ -211,6 +301,7 @@ export class ArticleDetailComponent implements OnInit {
       this.comments =[];
       this.articleService.getComments(+articleIdParam).subscribe(
         (data) => {
+        //  console.log(data)
           // Start processing comments sequentially
           this.processCommentsOnebyOne(data, 0);
 
@@ -225,13 +316,15 @@ export class ArticleDetailComponent implements OnInit {
   processCommentsOnebyOne(data: any[], index: number) {
     if (index < data.length) {
       const comment = data[index];
-      //console.log("ena id taa user ",comment.id_user);
+      console.log("ena id taa user ",comment.id_user);
       this.authservice.getUserbyId(comment.id_user).subscribe(
         (response) => {
           //amalna -1 khater tab fih decalage taa id donc na9sou 1 bch njiw bethabt
           //response[0] atana l usrname taa id 1
-          const username = response[(comment.id_user) -1 ].username;
-          //console.log("salut username",username)
+
+          const username = response[(comment.id_user)].username;
+          //const username = response[7].username ;
+          console.log("salut username",username)
           const commentText = ` ${username} :  ${comment.commentaire}`;
           this.comments.unshift(commentText);
 
@@ -250,8 +343,39 @@ export class ArticleDetailComponent implements OnInit {
       // Additional actions if needed after processing all comments
     }
   }
+ /* processCommentsOnebyOne(data: any[], index: number) {
+    if (index < data.length) {
+      const comment = data[index];
+      // console.log("ena id taa user ", comment.id_user);
+      this.authservice.getUserbyId(comment.id_user).subscribe(
+        (response) => {
+          // amalna -1 khater tab fih decalage taa id donc na9sou 1 bch njiw bethabt
+          // response[0] atana l usrname taa id 1
+          console.log(response)
+          const user = response.find(user => user.id === comment.id_user);
+          const username = user ? user.username : 'Unknown User';
+          // console.log("salut username", username)
+          const commentText = `${username}: ${comment.commentaire}`;
+          this.comments.unshift(commentText);
 
-/*************** section Modify *********************/
+          // Process the next comment
+          this.processCommentsOnebyOne(data, index + 1);
+        },
+        (error) => {
+          this.toastr.error("Erreur getting comments");
+
+          // Skip to the next comment even if there's an error
+          this.processCommentsOnebyOne(data, index + 1);
+        }
+      );
+    } else {
+      // All comments processed
+      // Additional actions if needed after processing all comments
+    }
+  }
+*/
+
+  /*************** section Modify *********************/
 
   modifyArticle(): void {
     this.isModifying = true;

@@ -9,9 +9,9 @@
       <!-- Like/Dislike Section -->
       <div class="mt-4 d-flex align-items-center">
         <h4 class="mr-3">Likes/Dislikes</h4>
-        <button class="btn btn-success " (click)="toggleLike()">
+        <button class="btn btn-success " (click)="toggleLike1()">
           <i class="fas fa-thumbs-up" [ngClass]="{'liked': article.liked}"></i>
-          {{ article.likes }}
+        {{article.likes}}
         </button><button class="btn btn-danger ml-3" (click)="toggleDislike()">
           <i class="fas fa-thumbs-down" [ngClass]="{'disliked': article.disliked}"></i>
           {{ article.dislikes }}

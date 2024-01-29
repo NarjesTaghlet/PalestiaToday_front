@@ -56,7 +56,7 @@ export class ArticlesComponent implements OnInit {
 
     }else{
       this.showCard = !this.showCard;
-      this.router.navigate(['/read-more'])
+      //this.router.navigate(['/read-more'])
     }
   }
 
@@ -94,4 +94,9 @@ export class ArticlesComponent implements OnInit {
       this.router.navigate(['/home'])
     }
   }
+
+    redirectToLogin(){
+        this.router.navigate(['/Login']);
+
+    }
 }

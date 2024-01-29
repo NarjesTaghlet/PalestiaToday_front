@@ -9,7 +9,7 @@ import {User} from "./Model/user";
     providedIn: 'root'
 })
 export class AuthService {
-    constructor(private router: Router, private http: HttpClient,private route: ActivatedRoute,) {
+    constructor(private router: Router, private http: HttpClient,private route: ActivatedRoute) {
         // Set initial login status based on the presence of the token
         this.isLoggedIn.next(this.isAuthenticated());
     }
@@ -93,8 +93,8 @@ export class AuthService {
 
     logout(): void {
         this.isLoggedIn.next(false);
-        console.log(this.getToken())
 
+        console.log(this.getToken())
         localStorage.removeItem('access_token');
         console.log(this.getToken())
         console.log("Logged out, isLoggedIn set to false");

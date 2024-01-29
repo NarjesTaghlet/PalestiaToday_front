@@ -22,6 +22,10 @@
         <li class="nav-item">
           <a class="nav-link"  *ngIf="isAdmin() && isLoggedIn" [routerLink]="['word']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active text-white">Publish an Article</a>
         </li>
+
+        <li class="nav-item">
+          <a class="nav-link" *ngIf="isAdmin() && isLoggedIn" [routerLink]="['dashboard']" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active text-white">Admin Dashboard </a>
+        </li>
       </ul>
       <!-- User icon for the login option -->
       <!-- <ul class="navbar-nav ml-auto">

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {AuthService} from "../auth.service";
+import {ReactionType} from "../Model/interactionarticle";
+import {Article} from "../Model/article";
 
 @Injectable({
   providedIn: 'root'
@@ -50,5 +52,51 @@ export class ArticleService {
   ModifyArticle(articleId : number,title : string , description : string){
     return this.http.patch<any>(`${this.apiUrl}/${articleId}`,{title, description});
   }
+
+
+    addLike(idArticle: number, idVisiteur: number): Observable<any> {
+        return this.http.post(`${this.apiUrl2}/like/${idArticle}/${idVisiteur}`, { reaction: ReactionType.LIKE });
+    }
+
+
+    adddisLike(idArticle: number, idVisiteur: number): Observable<any> {
+        return this.http.post(`${this.apiUrl2}/like/${idArticle}/${idVisiteur}`, { reaction: ReactionType.DISLIKE });
+    }
+
+
+    addNote(idArticle: number, idVisiteur: number, note: number): Observable<any> {
+        return this.http.post(`${this.apiUrl2}/note/${idArticle}/${idVisiteur}`, { note });
+    }
+
+    getNote(idArticle: number, idVisiteur: number): Observable<any> {
+        return this.http.get(`${this.apiUrl2}/note/${idArticle}/${idVisiteur}`);
+    }
+
+
+    getLikes(articleId: number): Observable<number> {
+        return this.http.get<number>(`${this.apiUrl2}/likes/${articleId}`);
+    }
+    getDislikes(articleId: number): Observable<number> {
+        return this.http.get<number>(`${this.apiUrl2}/dislikes/${articleId}`);
+    }
+
+
+  getNoteGenerale(idArticle: number): Observable<any> {
+    return this.http.get(`${this.apiUrl2}/general/${idArticle}`);
+  }
+
+
+  getDeletedArticles(): Observable<any> {
+    const url = `${this.apiUrl}/deleted`;
+    return this.http.get<any>(url);
+  }
+
+  RestoreArticle(idArticle : number) {
+    return this.http.get(`${this.apiUrl}/restore/${idArticle}`);
+  }
+
+
+
+
 
 }

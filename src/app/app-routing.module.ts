@@ -3,10 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { CvComponent } from './cvTech/cv/cv.component';
 import { LoginComponent } from './login/login.component';
-import { TaskManagerComponent } from './task-manager/task-manager.component';
-import { ColorComponent } from './color/color.component';
 import { MiniWordComponent } from './mini-word/mini-word.component';
-import { CardComponent } from './card/card.component';
 import { DetailComponent } from './cvTech/detail/detail.component';
 import { DeleteCvComponent } from './cvTech/delete-cv/delete-cv.component';
 import { ErrorComponent } from './error/error.component';
@@ -17,6 +14,9 @@ import {RegisterComponent} from "./register/register.component";
 import {AccessGuard} from "./guards/access.guard";
 import {ArticleDetailComponent} from "./articles/article-detail/article-detail.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+import {PalestineMapComponent} from "./palestine-map/palestine-map.component";
+import {QuizzTineComponent} from "./quizz-tine/quizz-tine.component";
+import {ContactComponent} from "./contact/contact.component";
 const routes: Routes = [
   {path: 'cv', children:[
     { path: '', component: CvComponent },
@@ -26,19 +26,17 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
 
   { path: 'Login', component: LoginComponent},
-  { path: 'Color', component: ColorComponent},
   { path: 'logout', component: LogoutComponent },
 
-  { path: 'card', component: CardComponent},
-  //{ path: 'PocAddStudents', component:  },
-  { path: 'TaskManager', component: TaskManagerComponent },
   { path: "word", component: MiniWordComponent ,canActivate :[AccessGuard]},
   { path: 'about', component: AboutUsComponent },
   { path: 'articles', component: ArticlesComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'article/:id', component: ArticleDetailComponent},
   { path: 'dashboard', component: DashboardComponent , canActivate : [AccessGuard]},
-
+  { path: 'palestine-map', component: PalestineMapComponent},
+  { path: 'quizz-tine', component: QuizzTineComponent },
+  { path: 'contact', component: ContactComponent },
 
 
 

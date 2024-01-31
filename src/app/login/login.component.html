@@ -2,12 +2,12 @@
   <div class="row justify-content-center">
     <div class="col-md-6 mt-5">
       <div class="card login-card p-4 border rounded shadow">
+        <img src="./../../assets/images/woman.png" alt="Palestine Icon" class="icon">
         <h2 class="text-center mb-4">Login</h2>
         <form (ngSubmit)="OnLogin()" #loginForm="ngForm" class="needs-validation" novalidate>
           <div class="form-group">
             <label for="email" class="text-dark">Email:</label>
             <input email type="email" class="form-control" id="email" [(ngModel)]="credentials.username" name="email" required #emailField="ngModel">
-            <!--<input type="email" class="form-control" id="email" [(ngModel)]="email" name="email" required #emailField="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"> -->
             <div class="alert alert-danger" *ngIf="emailField.invalid && emailField.touched">
               The Email address is invalid.
             </div>

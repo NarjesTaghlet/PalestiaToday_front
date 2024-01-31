@@ -10,12 +10,12 @@
   text-align: center;
   padding: 40px 20px;
   position: relative;
-  color: #6d1313; /* Ensures text is white */
+  color: #6d1313;
 }
 
 .header-overlay {
   /* ... */
-  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for better readability */
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .site-title {
@@ -32,28 +32,28 @@
 .description {
   padding: 20px;
   background-color: transparent;
-  color: #531515; /* Adjust for better contrast if needed */
-  font-size: 1.2em; /* Slightly larger font size */
+  color: #531515;
+  font-size: 1.2em;
   font-style: italic;
-  text-align: center; /* Center the text */
+  text-align: center;
   max-width: 600px;
   margin: auto;
   position: relative;
 }
 
 .description:before {
-  content: open-quote; /* Adds an opening quotation mark */
+  content: open-quote;
   font-size: 4em;
-  color: #6d1313; /* Same color as the text for consistency */
-  position: absolute; /* Position absolutely within the description */
+  color: #6d1313;
+  position: absolute;
   left: 50%;
   top: 0;
-  transform: translate(-50%, -50%); /* Adjust the position */
+  transform: translate(-50%, -50%);
   opacity: 0.7;
 }
 
 .description:after {
-  content: close-quote; /* Adds a closing quotation mark */
+  content: close-quote;
   font-size: 4em;
   color: #6d1313;
   position: absolute;
@@ -66,18 +66,18 @@
 
 /* Carousel Styles */
 .carousel-container {
-  width: 100vw; /* Set width to 100% of the viewport width */
-  position: relative; /* Position it relative for alignment */
+  width: 100vw;
+  position: relative;
   left: 50%;
-  right: 50%; /* Move it to the left by 50% of its width */
-  margin-left: -50vw; /* Pull it back to the left edge */
-  margin-right: -50vw; /* Pull it back to the right edge */
-  overflow: hidden; /* Hide any horizontal overflow */
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
 }
 
 .carousel-container img {
-  width: 100%; /* Make images stretch to the container's width */
-  height: auto; /* Maintain the aspect ratio */
+  width: 100%;
+  height: auto;
 }
 
 
@@ -138,7 +138,7 @@
 }
 
 .testimonials {
-  background-color: #f4f4f4;
+  background-color:white;
   padding: 20px;
   text-align: center;
 }
@@ -189,7 +189,7 @@
 }
 
 
-/* Responsive Adjustments */
+
 @media (max-width: 768px) {
   .testimonial-card {
     max-width: 100%;
@@ -206,24 +206,42 @@
 }
 
 
-#backToTop {
-  /* ... existing styles ... */
-  display: none; /* Initially hidden */
-}
-/* Back to Top Button */
-#backToTop {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 10px 15px;
-  background-color: #666;
+
+
+/*Contact*/
+
+.contact-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #8b2727;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  display: none;
+  font-size: 1.2em;
+}
+
+.contact-button:hover {
+  background-color: #6d1313;
+}
+
+
+
+/* Back to Top Button */
+#backToTop {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  padding: 10px 15px;
+  background-color: white;
+  color:#8b2727;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #backToTop:hover {
-  background-color: #555;
+  background-color: #606C38;
 }
+

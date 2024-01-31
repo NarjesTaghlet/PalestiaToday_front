@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
     selector: 'app-header',
@@ -12,9 +12,7 @@ export class HeaderComponent {
     constructor(private authService: AuthService) {}
 
     ngOnInit() {
-        // Set initial login status
         this.isLoggedIn = this.authService.isAuthenticated();
-        // Subscribe to login status changes
         this.authService.isLoggedIn$.subscribe((loggedInStatus) => {
             this.isLoggedIn = loggedInStatus;
             console.log("Navbar isLoggedIn status:", this.isLoggedIn);

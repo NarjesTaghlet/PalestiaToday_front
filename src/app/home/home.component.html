@@ -1,10 +1,10 @@
 <div class="home-container">
   <header class="home-header">
     <div class="header-overlay"></div>
+    <img src="./../../assets/images/pic.png" alt="Palestine Icon" class="icon">
 
     <h1 class="site-title">Palestia Today</h1>
     <h2 class="site-subtitle">Voices from the Heart of Palestine</h2>
-
     <section class="description">
       <p>
         Welcome to Palestia Today, a space where untold stories unfold, capturing the essence of the ongoing conflict in Palestine. Explore real, uncensored narratives that resonate from the heart.
@@ -15,10 +15,10 @@
   <section class="carousel-container">
     <carousel [activeSlide]="activeSlideIndex">
       <slide *ngFor="let article of articles; let i = index" (click)="openArticle(i)">
-        <img [src]="article.image" alt="{{article.title}}" class="d-block w-100">
+        <img [src]="getImageForArticle(i)" class="card-img-top article-image" alt="Article Image">
         <div class="carousel-caption" [class.active]="activeSlideIndex === i">
           <h3>{{article.title}}</h3>
-          <p>{{article.summary}}</p>
+          <p>{{getSummary(article.description)}}</p>
         </div>
       </slide>
     </carousel>
@@ -63,7 +63,7 @@
 
   </div>
 </section>
-
+<button class="contact-button" (click)="openContactUs()">Contact Us</button>
 
 <button id="backToTop" *ngIf="showBackToTopButton" (click)="scrollToTop()">Back to Top</button>
 

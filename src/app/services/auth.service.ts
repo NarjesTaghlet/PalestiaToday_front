@@ -1,9 +1,9 @@
 // auth.service.ts
 import { Injectable } from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {BehaviorSubject, Observable, tap} from 'rxjs';
+import {BehaviorSubject, map, Observable, of, switchMap, tap} from 'rxjs';
 import {HttpClient} from "@angular/common/http";
-import {User} from "./Model/user";
+import {User} from "../Model/user";
 
 @Injectable({
     providedIn: 'root'
@@ -65,7 +65,7 @@ export class AuthService {
 
 
     getUserbyId(idUser : number):Observable<any>{
-     console.log("ena f getusername")
+     //console.log("ena f getusername")
       return this.http.get<any>(`${this.apiUrl}/user/${idUser}`);
     }
 
@@ -84,20 +84,12 @@ export class AuthService {
     }
 
     register(email: string, password: string, username : string) : Observable<any> {
-        // Implement your registration logic here
-        // For now, just log the registration and return true
-        //console.log("hana lenna")
-        //console.log(this.http.post<any>(${this.apiUrl}/user, {username,email,password}))
         return this.http.post<any>(`${this.apiUrl}/user`, {username,email,password})    }
 
 
     logout(): void {
         this.isLoggedIn.next(false);
-
-        console.log(this.getToken())
         localStorage.removeItem('access_token');
-        console.log(this.getToken())
-        console.log("Logged out, isLoggedIn set to false");
 
     }
 
@@ -122,6 +114,25 @@ export class AuthService {
         return user?.role === 'admin';
 
     }
+
+  isAdmin1(id: number): Observable<boolean> {
+    return this.getUserbyId(id).pipe(
+      map(user => user.role === 'admin')
+    );
+  }
+
+  isAdmin2(id: number): Observable<boolean> {
+    return this.getUserbyId(id).pipe(
+      switchMap(user => {
+        if (user && user.role === 'admin') {
+          return of(true);
+        } else {
+          return of(false);
+        }
+      })
+    );
+  }
+
 
 
 

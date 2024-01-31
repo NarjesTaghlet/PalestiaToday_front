@@ -8,25 +8,10 @@
   color: #333;
 }
 
-
-.custom-description {
-  font-size: 16px; /* Taille du texte */
-  line-height: 1.5; /* Hauteur de ligne (espace entre les lignes) */
-  /* Ajoutez d'autres styles au besoin */
-}
-
 .card-text {
   color: #555;
 }
-.btn-show-more {
-  color: darkred;
-  cursor: pointer;
-  transition: color 0.3s;
-}
 
-.btn-show-more:hover {
-  color: #0056b3;
-}
 .btn-like,
 .btn-dislike {
   margin-right: 10px;
@@ -75,25 +60,45 @@ textarea {
 }
 
 
-/* Add this to your component's CSS or global styles */
+.star.selected i.fa-star {
+  color: yellow; /* or the color you use for selected stars */
+  transition: transform 0.3s ease; /* Add a smooth scale transition for selected stars */
+}
+
+.star.selected:hover i.fa-star {
+  transform: scale(1.2); /* Enlarge the selected star on hover */
+}
+
+
 .star-rating {
-  font-size: 1.5rem;
-  color: #ffc107; /* Set the star color */
+  display: flex;
+  font-size: 1.5em; /* Adjust the font size as needed */
 }
 
-.star {
+
+.star:not(.selected):hover {
+  color: grey; /* Lighter shade of gold for hover state */
+}
+
+
+
+
+/* Add this to your CSS or SCSS file */
+.btn-show-more,
+.btn-show-less {
   cursor: pointer;
-  margin-right: 5px;
+  color: #c9302c;
+  text-decoration: underline;
+  margin-top: 10px;
+  transition: color 0.3s; /* Smooth color transition */
 }
 
-.fa-star {
-  color: #ffc107; /* Set the filled star color */
+.btn-show-more:hover,
+.btn-show-less:hover {
+  color: #c9302c;
 }
 
-.fa-star-o {
-  color: #ccc; /* Set the unfilled star color */
-}
-
-.locked .fa-star {
-  cursor: not-allowed;
+/* Additional styles */
+.btn-show-more {
+  margin-right: 10px;
 }
